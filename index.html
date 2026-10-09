@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#163c32">
+  <meta name="description" content="Offline flessenteller voor voorraadbeheer en stockopnames.">
+  <title>StockTeller – Flessenteller</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-icon" aria-hidden="true">🍾</div>
+    <div><h1>StockTeller</h1><p>Voorraadbeheer · volle flessen</p></div>
+    <span id="offlineBadge" class="badge">Offline klaar</span>
+  </header>
+  <main>
+    <section class="summary" aria-label="Samenvatting">
+      <div class="stat"><span>Totaal geteld</span><strong id="totalBottles">0</strong><small>volle flessen</small></div>
+      <div class="stat"><span>Producten</span><strong id="productCount">0</strong><small>in de lijst</small></div>
+    </section>
+
+    <section class="panel">
+      <label for="stockName">Naam van deze stockopname</label>
+      <input id="stockName" maxlength="100" placeholder="Bijv. Stock oktober">
+      <div class="toolbar">
+        <h2>Flessen tellen</h2>
+        <button id="saveStock" class="primary">✓ Stockopname bewaren</button>
+      </div>
+      <label class="search-label" for="search">Zoek product</label>
+      <input id="search" type="search" placeholder="Typ een productnaam of inhoud…">
+      <div id="productList" class="product-list"></div>
+      <p id="emptyProducts" class="empty hidden">Nog geen producten. Voeg ze toe via <b>Producten</b>.</p>
+    </section>
+
+    <nav class="tabs" aria-label="Navigatie">
+      <button class="tab active" data-tab="tellen">☷ Tellen</button>
+      <button class="tab" data-tab="producten">＋ Producten</button>
+      <button class="tab" data-tab="historiek">◷ Historiek</button>
+      <button class="tab" data-tab="instellingen">⚙ Gegevens</button>
+    </nav>
+
+    <section id="tab-producten" class="panel tab-panel hidden">
+      <h2>Product toevoegen</h2>
+      <form id="productForm">
+        <label for="productName">Productnaam *</label>
+        <input id="productName" required maxlength="100" placeholder="Bijv. Spa Reine">
+        <label for="productSize">Inhoud per fles</label>
+        <select id="productSize">
+          <option>20 cl</option><option>25 cl</option><option selected>33 cl</option>
+          <option>50 cl</option><option>75 cl</option><option>1 L</option><option>1,5 L</option>
+          <option>2 L</option><option>Anders</option>
+        </select>
+        <button class="primary" type="submit">Product toevoegen</button>
+      </form>
+      <h2 class="subheading">Productenlijst <span id="manageCount"></span></h2>
+      <div id="manageProducts"></div>
+    </section>
+
+    <section id="tab-historiek" class="panel tab-panel hidden">
+      <div class="toolbar"><h2>Eerdere stockopnames</h2><button id="exportAll" class="secondary">Exporteren als CSV</button></div>
+      <p class="muted">Opnames blijven op dit toestel bewaard, ook wanneer je de app sluit.</p>
+      <div id="historyList"></div>
+      <p id="emptyHistory" class="empty">Nog geen stockopnames bewaard.</p>
+    </section>
+
+    <section id="tab-instellingen" class="panel tab-panel hidden">
+      <h2>Gegevens en back-up</h2>
+      <p>Je producten en tellingen worden lokaal op dit toestel opgeslagen. Exporteer regelmatig een back-up, vooral voordat je browsergegevens wist of van toestel verandert.</p>
+      <div class="button-stack">
+        <button id="backupJson" class="primary">⬇ Volledige back-up downloaden (JSON)</button>
+        <label class="file-button">⬆ Back-up terugzetten (JSON)<input id="restoreJson" type="file" accept=".json,application/json"></label>
+        <button id="exportCurrent" class="secondary">Export huidige telling (CSV)</button>
+        <button id="resetCounts" class="secondary">Alle huidige aantallen op nul zetten</button>
+        <button id="deleteAll" class="danger">Alle lokale gegevens wissen</button>
+      </div>
+      <p class="muted">Let op: lokale opslag wordt niet automatisch gesynchroniseerd met andere telefoons of computers.</p>
+      <div id="storageStatus" class="notice"></div>
+    </section>
+    <footer>StockTeller · Nederlandstalig · Lokale opslag</footer>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js" defer></script>
+</body>
+</html>
